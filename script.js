@@ -12,6 +12,8 @@ const DIRECTION = {
 }
 // Soal no 2: Pengaturan Speed (semakin kecil semakin cepat) ubah dari 150 ke 120
 const MOVE_INTERVAL = 120;
+let countEatApple = 0;
+let level = 1;
 
 function initPosition() {
     return {
@@ -141,7 +143,31 @@ function eat(snake, apples) {
             audio.play();
             apple.position = initPosition();
             snake.score++;
+            countEatApple++;
             snake.body.push({ x: snake.head.x, y: snake.head.y });
+            if (countEatApple === 5) {
+                countEatApple = 0
+                level++;
+                var audio = new Audio('level-up.wav');
+                audio.play();
+                setTimeout(() => {
+                    alert(`Level up, selamat kamu berhasil ke level selanjutnya ${level}`);
+                }, 300)
+            }
+            if (level === 5) {
+                // final game
+                level = 0;
+                var audio = new Audio('game-over.wav');
+                audio.play();
+                setTimeout(() => {
+                    alert("Game over");
+                }, 300)
+                countEatApple = 0
+                level = 1
+                snake1 = initSnake("purple");
+                snake2 = initSnake("blue");
+                let snake3 = initSnake("black");
+            }
         }
     }
 }
@@ -274,8 +300,8 @@ document.addEventListener("keydown", function (event) {
 
 function initGame() {
     move(snake1);
-    move(snake2);
-    move(snake3);
+    // move(snake2);
+    // move(snake3);
 }
 
 initGame();
