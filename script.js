@@ -157,10 +157,10 @@ function eat(snake, apples) {
             if (level === 5) {
                 // final game
                 level = 0;
-                var audio = new Audio('game-over.wav');
+                var audio = new Audio('final-game.wav');
                 audio.play();
                 setTimeout(() => {
-                    alert("Game over");
+                    alert("Game selesai");
                 }, 300)
                 countEatApple = 0
                 level = 1
