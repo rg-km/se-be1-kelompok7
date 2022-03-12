@@ -156,7 +156,8 @@ function eat(snake, apples) {
             }
             if (level === 5) {
                 // final game
-                level = 0;
+                level = 1;
+                countEatApple = 0
                 var audio = new Audio('final-game.wav');
                 audio.play();
                 setTimeout(() => {
@@ -215,6 +216,8 @@ function checkCollision(snakes) {
         setTimeout(() => {
             alert("Game over");
         }, 300)
+        countEatApple = 0
+        level = 1
         snake1 = initSnake("purple");
         snake2 = initSnake("blue");
     }
