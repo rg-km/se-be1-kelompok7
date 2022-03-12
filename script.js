@@ -137,6 +137,8 @@ function eat(snake, apples) {
     for (let i = 0; i < apples.length; i++) {
         let apple = apples[i];
         if (snake.head.x == apple.position.x && snake.head.y == apple.position.y) {
+            var audio = new Audio('eat-appel.wav');
+            audio.play();
             apple.position = initPosition();
             snake.score++;
             snake.body.push({ x: snake.head.x, y: snake.head.y });
@@ -182,10 +184,11 @@ function checkCollision(snakes) {
     }
     if (isCollide) {
         // Soal no 5: Add game over audio:
-        var audio = new Audio('game-over.mp3');
+        var audio = new Audio('game-over.wav');
         audio.play();
-
-        alert("Game over");
+        setTimeout(() => {
+            alert("Game over");
+        }, 300)
         snake1 = initSnake("purple");
         snake2 = initSnake("blue");
     }
