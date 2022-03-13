@@ -14,6 +14,7 @@ const DIRECTION = {
 const MOVE_INTERVAL = 120;
 let countEatApple = 0;
 let level = 1;
+let nyawa = 3;
 
 function initPosition() {
     return {
@@ -103,7 +104,7 @@ function drawScore(snake) {
     scoreCtx.clearRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
     scoreCtx.font = "30px Arial";
     scoreCtx.fillStyle = snake.color
-    scoreCtx.fillText(snake.score, 10, scoreCanvas.scrollHeight / 2);
+    scoreCtx.fillText(`${snake.score}`, 10, scoreCanvas.scrollHeight / 2);
 }
 
 function draw() {
@@ -125,6 +126,15 @@ function draw() {
             var img = document.getElementById("apple");
             ctx.drawImage(img, apple.position.x * CELL_SIZE, apple.position.y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
         }
+        for (let i = 0; i < nyawa; i++) {
+            // Soal no 3: DrawImage apple dan gunakan image id:
+            var heart = document.getElementById("heart");
+            ctx.drawImage(heart, 25 * i, 0, CELL_SIZE, CELL_SIZE);
+        }
+        ctx.font = "20px Arial";
+        ctx.fillText(`(level ${level})`, 0, 595);
+        // }
+        //         ctx.drawImage(heart, 0, 0, CELL_SIZE, CELL_SIZE);
         if (level > 1) {
             let snakeCanvas = document.getElementById("snakeBoard");
             let ctx = snakeCanvas.getContext("2d");
@@ -243,14 +253,18 @@ function checkCollision(snakes) {
         }
     }
     if (isCollide) {
+        nyawa--;
         // Soal no 5: Add game over audio:
-        var audio = new Audio('game-over.wav');
-        audio.play();
-        setTimeout(() => {
-            alert("Game over");
-        }, 300)
+        if (nyawa === 0) {
+            var audio = new Audio('game-over.wav');
+            audio.play();
+            setTimeout(() => {
+                alert("Game over");
+            }, 300)
+            nyawa = 3
+            level = 1
+        }
         countEatApple = 0
-        level = 1
         snake1 = initSnake("purple", "snake");
         snake2 = initSnake("black", "block");
         snake3 = initSnake("black", "block");
