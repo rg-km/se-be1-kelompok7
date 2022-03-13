@@ -22,31 +22,43 @@ function initPosition() {
     }
 }
 
-function initHeadAndBody() {
-    let head = initPosition();
-    let body = [{ x: head.x, y: head.y }];
-    return {
-        head: head,
-        body: body,
+function initHeadAndBody(type) {
+    console.log("type", type)
+    if (type === "snake") {
+        let head = initPosition();
+        let body = [{ x: head.x, y: head.y }];
+        return {
+            head: head,
+            body: body,
+        }
+    } else {
+        let head = initPosition();
+        let body = [{ x: head.x, y: head.y }, { x: head.x, y: head.y + 1 }, { x: head.x, y: head.y + 2 }, { x: head.x, y: head.y + 3 }, { x: head.x, y: head.y + 4 }, { x: head.x, y: head.y + 5 }, { x: head.x, y: head.y + 6 }];
+
+        return {
+            head: head,
+            body: body,
+        }
     }
+
 }
 
 function initDirection() {
     return Math.floor(Math.random() * 4);
 }
 
-function initSnake(color) {
+function initSnake(color, type) {
     return {
         color: color,
-        ...initHeadAndBody(),
+        ...initHeadAndBody(type),
         direction: initDirection(),
         score: 0,
     }
 }
-let snake1 = initSnake("purple");
-let snake2 = initSnake("blue");
+let snake1 = initSnake("purple", "snake");
+let snake2
 // Soal no 6: add snake3
-let snake3 = initSnake("black");
+let snake3
 
 // Soal no 4: make apples array
 let apples = [{
@@ -93,17 +105,6 @@ function draw() {
             drawCell(ctx, snake1.body[i].x, snake1.body[i].y, snake1.color);
         }
 
-        drawCell(ctx, snake2.head.x, snake2.head.y, snake2.color);
-        for (let i = 1; i < snake2.body.length; i++) {
-            drawCell(ctx, snake2.body[i].x, snake2.body[i].y, snake2.color);
-        }
-
-        // Soal no 6: Draw Player 3
-        drawCell(ctx, snake3.head.x, snake3.head.y, snake3.color);
-        for (let i = 1; i < snake3.body.length; i++) {
-            drawCell(ctx, snake3.body[i].x, snake3.body[i].y, snake3.color);
-        }
-
         for (let i = 0; i < apples.length; i++) {
             let apple = apples[i];
 
@@ -111,11 +112,25 @@ function draw() {
             var img = document.getElementById("apple");
             ctx.drawImage(img, apple.position.x * CELL_SIZE, apple.position.y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
         }
+        if (level > 1) {
+            let snakeCanvas = document.getElementById("snakeBoard");
+            let ctx = snakeCanvas.getContext("2d");
 
+            drawCell(ctx, snake2.head.x, snake2.head.y, snake2.color);
+            for (let i = 1; i < snake2.body.length; i++) {
+                drawCell(ctx, snake2.body[i].x, snake2.body[i].y, snake2.color);
+            }
+
+            // Soal no 6: Draw Player 3
+            drawCell(ctx, snake3.head.x, snake3.head.y, snake3.color);
+            for (let i = 1; i < snake3.body.length; i++) {
+                drawCell(ctx, snake3.body[i].x, snake3.body[i].y, snake3.color);
+            }
+        }
         drawScore(snake1);
-        drawScore(snake2);
+        // drawScore(snake2);
         // Soal no 6: Draw Player 3 Score:
-        drawScore(snake3);
+        // drawScore(snake3);
     }, REDRAW_INTERVAL);
 }
 
@@ -165,9 +180,14 @@ function eat(snake, apples) {
                 }, 300)
                 countEatApple = 0
                 level = 1
-                snake1 = initSnake("purple");
-                snake2 = initSnake("blue");
-                let snake3 = initSnake("black");
+                snake1 = initSnake("purple", "snake");
+                snake2 = initSnake("black", "block");
+                snake3 = initSnake("black", "block");
+            }
+            if (level > 1) {
+                snake2 = initSnake("black", "block");
+                // Soal no 6: add snake3
+                snake3 = initSnake("black", "block");
             }
         }
     }
@@ -200,10 +220,10 @@ function moveUp(snake) {
 function checkCollision(snakes) {
     let isCollide = false;
     //this
-    for (let i = 0; i < snakes.length; i++) {
-        for (let j = 0; j < snakes.length; j++) {
-            for (let k = 1; k < snakes[j].body.length; k++) {
-                if (snakes[i].head.x == snakes[j].body[k].x && snakes[i].head.y == snakes[j].body[k].y) {
+    for (let i = 0; i < snakes?.length; i++) {
+        for (let j = 0; j < snakes?.length; j++) {
+            for (let k = 1; k < snakes[j]?.body.length; k++) {
+                if (snakes[i]?.head.x == snakes[j]?.body[k].x && snakes[i]?.head.y == snakes[j]?.body[k].y) {
                     isCollide = true;
                 }
             }
@@ -218,8 +238,9 @@ function checkCollision(snakes) {
         }, 300)
         countEatApple = 0
         level = 1
-        snake1 = initSnake("purple");
-        snake2 = initSnake("blue");
+        snake1 = initSnake("purple", "snake");
+        snake2 = initSnake("black", "block");
+        snake3 = initSnake("black", "block");
     }
     return isCollide;
 }
