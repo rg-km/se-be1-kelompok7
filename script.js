@@ -70,10 +70,23 @@ let apples = [{
     position: initPosition(),
 }]
 
-function drawCell(ctx, x, y, color) {
-    ctx.fillStyle = color;
-    ctx.fillRect(x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+// function drawCell(ctx, x, y, color) {
+//     ctx.fillStyle = color;
+//     ctx.fillRect(x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+// }
+function drawCell(context, x, y, color, type) {
+    if (type === "snake") {
+        context.beginPath();
+        context.fillStyle = color;
+
+        context.arc(x * CELL_SIZE + 10, y * CELL_SIZE + 10, CELL_SIZE / 2, 0, 2 * Math.PI);
+        context.fill();
+    } else {
+        context.fillStyle = color;
+        context.fillRect(x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+    }
 }
+
 
 // Soal no 6: Pada fungsi drawScore, tambahkan score3Board:
 function drawScore(snake) {
@@ -100,9 +113,9 @@ function draw() {
 
         ctx.clearRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
 
-        drawCell(ctx, snake1.head.x, snake1.head.y, snake1.color);
+        drawCell(ctx, snake1.head.x, snake1.head.y, snake1.color, "snake");
         for (let i = 1; i < snake1.body.length; i++) {
-            drawCell(ctx, snake1.body[i].x, snake1.body[i].y, snake1.color);
+            drawCell(ctx, snake1.body[i].x, snake1.body[i].y, snake1.color, "snake");
         }
 
         for (let i = 0; i < apples.length; i++) {
@@ -116,15 +129,15 @@ function draw() {
             let snakeCanvas = document.getElementById("snakeBoard");
             let ctx = snakeCanvas.getContext("2d");
 
-            drawCell(ctx, snake2.head.x, snake2.head.y, snake2.color);
+            drawCell(ctx, snake2.head.x, snake2.head.y, snake2.color, "block");
             for (let i = 1; i < snake2.body.length; i++) {
-                drawCell(ctx, snake2.body[i].x, snake2.body[i].y, snake2.color);
+                drawCell(ctx, snake2.body[i].x, snake2.body[i].y, snake2.color, "block");
             }
 
             // Soal no 6: Draw Player 3
-            drawCell(ctx, snake3.head.x, snake3.head.y, snake3.color);
+            drawCell(ctx, snake3.head.x, snake3.head.y, snake3.color, "block");
             for (let i = 1; i < snake3.body.length; i++) {
-                drawCell(ctx, snake3.body[i].x, snake3.body[i].y, snake3.color);
+                drawCell(ctx, snake3.body[i].x, snake3.body[i].y, snake3.color, "block");
             }
         }
         drawScore(snake1);
